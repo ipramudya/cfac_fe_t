@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom'
 
 export function LoginPage() {
   const isMobile = useMediaQuery('(max-width: 640px)')
-  const setSession = useSession((state) => state.setToken)
+  const setSession = useSession((state) => state.setSession)
   const navigate = useNavigate()
 
   const [passwordVisible, setPasswordVisible] = React.useState(false)
@@ -36,7 +36,7 @@ export function LoginPage() {
       return
     }
 
-    setSession(res.token)
+    setSession({ ...res })
     navigate('/chat')
   })
 

@@ -1,18 +1,27 @@
 import { create } from 'zustand'
-import { persist, createJSONStorage } from 'zustand/middleware'
+import { createJSONStorage, persist } from 'zustand/middleware'
+
+type Session = {
+  token: string
+  user: {
+    id: string
+    username: string
+    createdAt: Date
+  }
+}
 
 type SessionState = {
-  token: string
-  setToken: (token: string) => void
+  session: Session | null
+  setSession: (token: Session) => void
   clearToken: () => void
 }
 
 export const useSession = create<SessionState>()(
   persist(
     (set) => ({
-      token: '',
-      setToken: (token: string) => set({ token }),
-      clearToken: () => set({ token: undefined }),
+      session: null,
+      setSession: (data: Session) => set({ session: data }),
+      clearToken: () => set({ session: null }),
     }),
     {
       name: 'session-token',

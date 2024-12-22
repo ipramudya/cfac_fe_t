@@ -1,2 +1,6 @@
+export * from './Chat'
+export * from './ChatHeader'
+export * from './ChatInput'
+export * from './EmptyChat'
 export * from './RootRoute'
 export * from './UIProvider'

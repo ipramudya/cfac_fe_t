@@ -1,4 +1,4 @@
-import { AxiosError } from 'axios'
+import axios from 'axios'
 import { apiClient } from './client'
 
 type LoginRequest = {
@@ -8,22 +8,23 @@ type LoginRequest = {
 
 type LoginSuccessResponse = {
   token: string
+  user: {
+    id: string
+    username: string
+    createdAt: Date
+  }
 }
 
 type LoginErrorResponse = {
-  error: string
+  message: string
 }
 
-type LoginResponse = LoginSuccessResponse | LoginErrorResponse
-
-export async function login(payload: LoginRequest): Promise<LoginResponse> {
+export async function login(payload: LoginRequest) {
   try {
-    const response = await apiClient.post('/login', payload)
-    return {
-      token: response.data.token,
-    }
+    const response = await apiClient.post<LoginSuccessResponse>('/login', payload)
+    return response.data
   } catch (error: unknown) {
-    if (error instanceof AxiosError && error.response) {
+    if (axios.isAxiosError<LoginErrorResponse>(error) && error.response) {
       return { error: error.response.data.message }
     }
     return { error: 'An unexpected error occurred.' }

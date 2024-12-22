@@ -1,4 +1,4 @@
-import { AxiosError } from 'axios'
+import axios from 'axios'
 import { apiClient } from './client'
 
 type RegisterRequest = {
@@ -7,24 +7,16 @@ type RegisterRequest = {
   confirmPassword: string
 }
 
-type RegisterSuccessResponse = {
-  data: any
-}
-
 type RegisterErrorResponse = {
-  error: string
+  message: string
 }
 
-type RegisterResponse = RegisterSuccessResponse | RegisterErrorResponse
-
-export async function register(payload: RegisterRequest): Promise<RegisterResponse> {
+export async function register(payload: RegisterRequest) {
   try {
-    const response = await apiClient.post('/register', payload)
-    return {
-      data: response.data,
-    }
+    await apiClient.post('/register', payload)
+    return { error: undefined }
   } catch (error: unknown) {
-    if (error instanceof AxiosError && error.response) {
+    if (axios.isAxiosError<RegisterErrorResponse>(error) && error.response) {
       return { error: error.response.data.message }
     }
     return { error: 'An unexpected error occurred.' }
