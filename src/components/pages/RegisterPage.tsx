@@ -1,6 +1,7 @@
 import * as api from '@/api'
 import { AuthLayout } from '@/components/layout'
 import { registerFormSchema, RegisterFormSchema } from '@/form-validation'
+import { useMediaQuery } from '@/hooks'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Checkbox, Input, Link } from '@nextui-org/react'
 import React from 'react'
@@ -8,9 +9,10 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
 export function RegisterPage() {
-  const [passwordVisible, setPasswordVisible] = React.useState(false)
+  const isMobile = useMediaQuery('(max-width: 640px)')
   const navigate = useNavigate()
 
+  const [passwordVisible, setPasswordVisible] = React.useState(false)
   const toggleVisibility = () => setPasswordVisible((prevState) => !prevState)
 
   const form = useForm<RegisterFormSchema>({
@@ -60,6 +62,7 @@ export function RegisterPage() {
           variant="bordered"
           errorMessage={form.formState.errors.username?.message}
           isInvalid={Boolean(form.formState.errors.username)}
+          size={isMobile ? 'sm' : 'md'}
         />
         <Input
           {...form.register('password')}
@@ -69,6 +72,7 @@ export function RegisterPage() {
           type={passwordVisible ? 'text' : 'password'}
           errorMessage={form.formState.errors.password?.message}
           isInvalid={Boolean(form.formState.errors.password)}
+          size={isMobile ? 'sm' : 'md'}
         />
         <Input
           {...form.register('confirmPassword')}
@@ -78,6 +82,7 @@ export function RegisterPage() {
           type={passwordVisible ? 'text' : 'password'}
           errorMessage={form.formState.errors.confirmPassword?.message}
           isInvalid={Boolean(form.formState.errors.confirmPassword)}
+          size={isMobile ? 'sm' : 'md'}
         />
         <Checkbox
           size="sm"
@@ -93,6 +98,7 @@ export function RegisterPage() {
           type="submit"
           isDisabled={!form.formState.isValid}
           isLoading={form.formState.isSubmitting}
+          size={isMobile ? 'sm' : 'md'}
         >
           Continue
         </Button>
