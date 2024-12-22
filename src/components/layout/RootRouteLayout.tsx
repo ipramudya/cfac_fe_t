@@ -1,23 +1,25 @@
+import { UIProvider } from '@/components/core'
 import { Container } from '@/components/shared'
-import React from 'react'
-import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { useSession } from '@/state/useSession'
+import { Navigate, Outlet, useLocation } from 'react-router-dom'
 
 export function RootRouteLayout() {
-  const navigate = useNavigate()
   const { pathname } = useLocation()
+  const session = useSession((state) => state.token)
 
-  React.useEffect(() => {
-    if (pathname.includes('/auth')) return
+  if (!session && !pathname.includes('auth')) {
+    return <Navigate to="/auth/login" replace />
+  }
 
-    navigate('/chat', { replace: true })
-  }, [navigate, pathname])
+  if (session && pathname.includes('auth')) {
+    return <Navigate to="/chat" replace />
+  }
 
   return (
-    <Container>
-      <div>
-        <p>hello world, root layout</p>
-      </div>
-      <Outlet />
-    </Container>
+    <UIProvider>
+      <Container>
+        <Outlet />
+      </Container>
+    </UIProvider>
   )
 }
