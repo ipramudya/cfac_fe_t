@@ -1,11 +1,15 @@
+import { useWs } from '@/hooks'
+import { useSession } from '@/state/useSession'
 import { Avatar, Button } from '@nextui-org/react'
 import { Menu09Icon, UserIcon } from 'hugeicons-react'
 
 export function ChatHeader() {
+  const session = useSession((state) => state.session)
+
   return (
     <header className="flex flex-col">
       {/* logo */}
-      <div className="bg-gray-50 p-3 sm:px-6">
+      <div className="bg-gray-50 px-3 py-1.5 sm:px-6">
         <h1 className="w-fit bg-gradient-to-t from-foreground-800 to-foreground-500 bg-clip-text text-sm font-semibold text-transparent">
           Nutritionist | Chat Bot
         </h1>
@@ -19,12 +23,31 @@ export function ChatHeader() {
             showFallback
             fallback={<UserIcon size={16} strokeWidth="2" className="text-default-600" />}
           />
-          <h2 className="w-fit text-sm sm:text-base">@usernameone</h2>
+          <div className="flex flex-col">
+            <h2 className="w-fit text-sm sm:text-base">
+              {session ? `@${session.user.username}` : 'N/A'}
+            </h2>
+            <ChatHeaderIndicator />
+          </div>
         </div>
         <Button size="sm" isIconOnly aria-label="settings" variant="light">
           <Menu09Icon strokeWidth="2" size={16} className="text-inherit" />
         </Button>
       </div>
     </header>
+  )
+}
+
+function ChatHeaderIndicator() {
+  const { isConnected } = useWs()
+
+  return (
+    <p className="text-xs">
+      {isConnected ? (
+        <span className="text-success-600">Connected</span>
+      ) : (
+        <span className="text-danger-600">Disconnected</span>
+      )}
+    </p>
   )
 }

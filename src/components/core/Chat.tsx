@@ -1,5 +1,4 @@
-import { cn } from '@/utils'
-import { Skeleton } from '@nextui-org/react'
+import { cn, Skeleton } from '@nextui-org/react'
 
 type Props = {
   role: 'user' | 'assistant'
@@ -25,7 +24,7 @@ export function Chat({ role, date, isLoading, children }: Props) {
             'w-fit bg-gradient-to-r bg-clip-text text-xs font-semibold uppercase leading-none tracking-wider text-transparent',
             role === 'user'
               ? 'from-primary-700 to-primary-600'
-              : 'from-default-700 via-cyan-600 to-blue-700',
+              : 'from-violet-700 via-cyan-600 to-blue-700',
           )}
         >
           {role === 'user' ? 'you' : 'assistant'}

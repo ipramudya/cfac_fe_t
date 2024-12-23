@@ -8,8 +8,9 @@ export function ChatPage() {
     <ChatLayout>
       <div className="flex h-full overflow-y-auto p-3">
         <div className="flex h-fit flex-col gap-3">
-          {dummyChats.map((chat) => (
+          {dummyChats.map((chat, id) => (
             <Chat
+              key={`chat-${id}`}
               role={chat.role}
               date={'date' in chat ? shortenDate(chat.date) : undefined}
               isLoading={'isLoading' in chat ? chat.isLoading : undefined}

@@ -1,6 +1,6 @@
 import { RootRouteLayout } from '@/components/layout'
 import { ChatPage, LoginPage, RegisterPage } from '@/components/pages'
-import { RouteObject } from 'react-router-dom'
+import { Navigate, RouteObject } from 'react-router-dom'
 
 export function RootRoute() {
   return [
@@ -8,6 +8,10 @@ export function RootRoute() {
       path: '/',
       element: <RootRouteLayout />,
       children: [
+        {
+          index: true,
+          element: <Navigate to="/chat" replace />,
+        },
         {
           path: '/auth/login',
           element: <LoginPage />,

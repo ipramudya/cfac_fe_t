@@ -13,7 +13,7 @@ type Session = {
 type SessionState = {
   session: Session | null
   setSession: (token: Session) => void
-  clearToken: () => void
+  clearSession: () => void
 }
 
 export const useSession = create<SessionState>()(
@@ -21,7 +21,7 @@ export const useSession = create<SessionState>()(
     (set) => ({
       session: null,
       setSession: (data: Session) => set({ session: data }),
-      clearToken: () => set({ session: null }),
+      clearSession: () => set({ session: null }),
     }),
     {
       name: 'session-token',
