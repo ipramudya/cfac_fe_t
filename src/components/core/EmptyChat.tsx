@@ -1,6 +1,6 @@
 export function EmptyChat() {
   return (
-    <div className="rounded-xl border border-primary-700 bg-primary-50 p-3">
+    <div className="flex flex-col items-center justify-center gap-1.5 rounded-xl border border-primary-700 bg-primary-50 p-3">
       <p className="w-fit bg-gradient-to-r from-default-900 via-cyan-600 to-blue-700 bg-clip-text text-xs font-semibold uppercase text-transparent">
         empty chat
       </p>

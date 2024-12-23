@@ -43,9 +43,9 @@ export function useWs() {
       setIsProcessing(true)
     })
 
-    socket.on('error', (error: string) => {
+    socket.on('error', (error: Error) => {
+      setError(error)
       setIsProcessing(false)
-      console.log('on:error', error)
     })
 
     return () => {
