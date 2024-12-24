@@ -18,10 +18,10 @@ const SocketContext = React.createContext<SocketContextValue>({
 })
 
 function SocketProvider({ children }: React.PropsWithChildren) {
-  const session = useSession((state) => state.session)
   const socketRef = React.useRef<Socket | null>(null)
-  const { dispatch, state } = useSocketEvent()
+  const session = useSession((state) => state.session)
   const addInMemoryMessage = useInMemoryMessages((state) => state.addMessage)
+  const { dispatch, state } = useSocketEvent()
 
   React.useEffect(() => {
     if (socketRef.current) return
@@ -36,7 +36,7 @@ function SocketProvider({ children }: React.PropsWithChildren) {
       addInMemoryMessage(message)
     }
 
-    if (session && !socketRef.current) {
+    if (session) {
       const socket = io(import.meta.env.VITE_WS_ENDPOINT, {
         autoConnect: false,
         reconnectionDelayMax: 3000,
@@ -57,13 +57,13 @@ function SocketProvider({ children }: React.PropsWithChildren) {
     }
 
     return () => {
-      socketRef.current?.disconnect()
       socketRef.current?.off('connect_error', onConnectError)
       socketRef.current?.off('connect', onConnect)
       socketRef.current?.off('disconnect', onDisconnect)
       socketRef.current?.off('error', onError)
       socketRef.current?.off('processing', onProcessing)
       socketRef.current?.off('message', onMessage)
+      socketRef.current?.disconnect()
       socketRef.current = null
     }
   }, [addInMemoryMessage, dispatch, session])
