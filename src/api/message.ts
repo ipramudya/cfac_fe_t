@@ -1,4 +1,4 @@
-import { useSession } from '@/state/useSession'
+import { useSession } from '@/state'
 import { Message } from '@/types'
 import axios from 'axios'
 import { apiClient } from './client'

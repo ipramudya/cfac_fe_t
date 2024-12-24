@@ -1,5 +1,4 @@
-import { useWs } from '@/hooks'
-import { useSession } from '@/state/useSession'
+import { useSession, useSocket } from '@/state'
 import { Avatar, Button } from '@nextui-org/react'
 import { Menu09Icon, UserIcon } from 'hugeicons-react'
 
@@ -9,7 +8,7 @@ export function ChatHeader() {
   return (
     <header className="flex flex-col">
       {/* logo */}
-      <div className="bg-gray-50 px-3 py-1.5 sm:px-6">
+      <div className="bg-gray-50 p-3 sm:px-6">
         <h1 className="w-fit bg-gradient-to-t from-foreground-800 to-foreground-500 bg-clip-text text-sm font-semibold text-transparent">
           Nutritionist | Chat Bot
         </h1>
@@ -39,7 +38,7 @@ export function ChatHeader() {
 }
 
 function ChatHeaderIndicator() {
-  const { isConnected } = useWs()
+  const { isConnected } = useSocket()
 
   return (
     <p className="text-xs">

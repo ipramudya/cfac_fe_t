@@ -1,6 +1,6 @@
 import { UIProvider } from '@/components/core'
 import { Container } from '@/components/shared'
-import { useSession } from '@/state/useSession'
+import { useSession } from '@/state'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 
 export function RootRouteLayout() {
