@@ -1,33 +1,17 @@
 import { getMessages } from '@/api'
-import { Message } from '@/types'
-import React, { useEffect, useMemo } from 'react'
+import useSWR from 'swr'
 
 export function useGetMessages() {
-  const [messages, setMessages] = React.useState<Message[]>([])
-  const [errorMessage, setErrorMessage] = React.useState<string | null>(null)
-  const [isLoading, setIsLoading] = React.useState(false)
+  const { data, isLoading, mutate } = useSWR('/messages', getMessages, {
+    revalidateIfStale: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  })
 
-  useEffect(() => {
-    void (async () => {
-      setIsLoading(true)
-
-      const res = await getMessages()
-      if ('error' in res) {
-        setErrorMessage(res.error)
-      } else {
-        setMessages(res.messages)
-      }
-
-      setIsLoading(false)
-    })()
-  }, [])
-
-  return useMemo(
-    () => ({
-      messages,
-      error: errorMessage,
-      isLoading,
-    }),
-    [errorMessage, isLoading, messages],
-  )
+  return {
+    messages: data && 'messages' in data ? data.messages : [],
+    error: data && 'error' in data ? data.error : null,
+    isLoading,
+    refetch: mutate,
+  }
 }

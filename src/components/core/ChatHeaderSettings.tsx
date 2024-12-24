@@ -1,6 +1,7 @@
 import * as api from '@/api'
 import { ChangePasswordForm, changePasswordFormSchema } from '@/form-validation'
-import { useSession } from '@/state'
+import { useGetMessages } from '@/hooks'
+import { useInMemoryMessages, useSession } from '@/state'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Button,
@@ -13,6 +14,7 @@ import {
   Modal,
   ModalBody,
   ModalContent,
+  ModalFooter,
   ModalHeader,
 } from '@nextui-org/react'
 import { Key01Icon, Logout01Icon, Menu09Icon, MessageCancel02Icon } from 'hugeicons-react'
@@ -29,6 +31,7 @@ const menuList = [
 
 export function ChatHeaderSettings() {
   const [changePasswordPopup, setChangePasswordPopup] = React.useState(false)
+  const [clearMessagesPopup, setClearMessagesPopup] = React.useState(false)
   const navigate = useNavigate()
   const clearSession = useSession((state) => state.clearSession)
 
@@ -37,7 +40,7 @@ export function ChatHeaderSettings() {
       case 'change-password':
         return setChangePasswordPopup(true)
       case 'clear-messages':
-        return 'Clear Messages'
+        return setClearMessagesPopup(true)
       case 'logout':
         return onLogout()
       default:
@@ -56,6 +59,13 @@ export function ChatHeaderSettings() {
         <RenderChangePasswordPopup
           open={changePasswordPopup}
           onClose={() => setChangePasswordPopup(false)}
+        />
+      )}
+
+      {clearMessagesPopup && (
+        <RenderClearMessagesPopup
+          open={clearMessagesPopup}
+          onClose={() => setClearMessagesPopup(false)}
         />
       )}
 
@@ -83,12 +93,44 @@ export function ChatHeaderSettings() {
   )
 }
 
-type RenderChangePasswordPopupProps = {
-  open: boolean
-  onClose: VoidFunction
+function RenderClearMessagesPopup({ open, onClose }: { open: boolean; onClose: VoidFunction }) {
+  const clearInMemoryMessages = useInMemoryMessages((state) => state.clearMessages)
+  const { refetch: refetchMessages } = useGetMessages()
+
+  const onClearMessages = async () => {
+    clearInMemoryMessages()
+    const res = await api.deleteMessage()
+    if (res.error) {
+      toast.error("Couldn't clear messages")
+    } else {
+      refetchMessages()
+    }
+    onClose()
+  }
+
+  return (
+    <Modal isOpen={open} size="md" onClose={onClose}>
+      <ModalContent>
+        <ModalHeader>Clear Messages</ModalHeader>
+        <ModalBody>
+          <p className="text-sm text-content4-foreground">
+            Are you sure you want to clear all messages? This action cannot be undone.
+          </p>
+        </ModalBody>
+        <ModalFooter>
+          <Button variant="light" size="sm" onPress={onClose}>
+            Cancel
+          </Button>
+          <Button color="danger" size="sm" onPress={onClearMessages}>
+            Proceed
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  )
 }
 
-function RenderChangePasswordPopup({ open, onClose }: RenderChangePasswordPopupProps) {
+function RenderChangePasswordPopup({ open, onClose }: { open: boolean; onClose: VoidFunction }) {
   const form = useForm<ChangePasswordForm>({
     mode: 'onBlur',
     resolver: zodResolver(changePasswordFormSchema),

@@ -1,4 +1,5 @@
 export * from './changePassword'
 export * from './login'
-export * from './message'
+export * from './getMessage'
 export * from './register'
+export * from './deleteMessage'

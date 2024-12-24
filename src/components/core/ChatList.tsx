@@ -1,5 +1,5 @@
 import { Chat } from '@/components/core'
-import { useGetMessages } from '@/hooks'
+import { useGetMessages } from '@/hooks/useGetMessages'
 import { useInMemoryMessages, useSocket } from '@/state'
 import { shortenDate } from '@/utils'
 import { Alert02Icon, Loading03Icon } from 'hugeicons-react'
