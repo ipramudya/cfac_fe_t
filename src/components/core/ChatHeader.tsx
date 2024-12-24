@@ -1,6 +1,7 @@
 import { useSession, useSocket } from '@/state'
-import { Avatar, Button } from '@nextui-org/react'
-import { Menu09Icon, UserIcon } from 'hugeicons-react'
+import { Avatar } from '@nextui-org/react'
+import { UserIcon } from 'hugeicons-react'
+import { ChatHeaderSettings } from './ChatHeaderSettings'
 
 export function ChatHeader() {
   const session = useSession((state) => state.session)
@@ -29,9 +30,7 @@ export function ChatHeader() {
             <ChatHeaderIndicator />
           </div>
         </div>
-        <Button size="sm" isIconOnly aria-label="settings" variant="light">
-          <Menu09Icon strokeWidth="2" size={16} className="text-inherit" />
-        </Button>
+        <ChatHeaderSettings />
       </div>
     </header>
   )
